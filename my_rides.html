@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rides</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Rides</h1>
+
+        {% if rides %}
+            {% for ride in rides %}
+                <div class="ride-card">
+                    <h2>Ride to {{ ride['destination'] }}</h2>
+                    <p><b>Ride ID:</b> {{ ride['ride_id'] }}</p>
+
+                    {% if ride['requests'] %}
+                        <h3>Ride Requests:</h3>
+                        <ul>
+                            {% for user_id, request in ride['requests'].items() %}
+                                <li>
+                                    <b>Name:</b> {{ request['name'] }} <br>
+                                    <b>Contact:</b> {{ request['contact'] }} <br>
+                                    <b>Status:</b> {{ request['status'] }} <br>
+                                    
+                                    {% if request['status'] == 'pending' %}
+                                        <form action="/respond_request" method="POST" style="margin-top: 10px;">
+                                            <input type="hidden" name="ride_id" value="{{ ride['ride_id'] }}">
+                                            <input type="hidden" name="user_id" value="{{ user_id }}">
+                                            <button type="submit" name="action" value="accept" class="btn accept-btn">Accept</button>
+                                            <button type="submit" name="action" value="reject" class="btn reject-btn">Reject</button>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                                <hr>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No ride requests yet.</p>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No rides shared by you yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

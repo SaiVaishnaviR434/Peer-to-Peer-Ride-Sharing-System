@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="results-container">
+        <h2>Search Results</h2>
+        {% if rides %}
+            <table>
+                <tr>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Fare (₹)</th>
+                    <th>Gender</th>
+                    <th>Action</th>
+                </tr>
+                {% for ride in rides %}
+                <tr>
+                    <td>{{ ride.source }}</td>
+                    <td>{{ ride.destination }}</td>
+                    <td>{{ ride.ride_fare }}</td>
+                    <td>{{ ride.gender }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('book_ride') }}">
+                            <input type="hidden" name="ride_id" value="{{ ride.ride_id }}">
+                            <button type="submit">Book</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

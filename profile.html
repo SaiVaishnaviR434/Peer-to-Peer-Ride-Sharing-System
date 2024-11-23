@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Find and Book Rides</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      .container {
+        text-align: center;
+        padding: 20px;
+      }
+      .header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      .sub-header {
+        font-size: 18px;
+        color: #555;
+      }
+      .image-container {
+        margin: 20px 0;
+      }
+      .form-container {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 0 10px;
+        display: none; /* Hide initially */
+      }
+      .form-group {
+        margin-bottom: 5px;
+        text-align: left;
+      }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-group input, .form-group select {
+        width: 75%;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .form-group input[type="date"] {
+        padding-right: 40px;
+      }
+      .form-group .icon {
+        position: absolute;
+        right: 10px;
+        top: 35px;
+        color: #888;
+      }
+      .form-group .icon-calendar {
+        right: 10px;
+      }
+      .form-group .icon-person {
+        right: 10px;
+      }
+      .search-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        width: 75%;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .search-button:hover {
+        background-color: #0056b3;
+      }
+      .footer {
+        display: flex;
+        justify-content: space-around;
+        background-color: #fff;
+        padding: 0.5px 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        bottom: 0;
+        width: 75%;
+      }
+      .footer a {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 14px;
+        text-align: center;
+      }
+      .footer a i {
+        display: block;
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">Find and Book Rides at Low Prices</div>
+      <div class="image-container">
+        <img alt="Illustration of a car" height="200" src="https://storage.googleapis.com/a1aa/image/rYtKJjIAyP7UExhtiFLw2xm0PqIDFSTYf9bhHDDzS0aHax4JA.jpg" width="300" />
+      </div>
+
+      <!-- Book a Ride Form -->
+      <form class="form-container" id="rideForm" action="{{ url_for('available_rides') }}" method="POST" style="display: none;">
+        <div class="form-group">
+          <label>Leaving from</label>
+          <input name="leaving_from" placeholder="Leaving from" type="text" required />
+        </div>
+        <div class="form-group">
+          <label>Going to</label>
+          <input name="going_to" placeholder="Going to" type="text" required />
+        </div>
+        <div class="form-group">
+          <label>Select Date <span style="color: red;">*</span></label>
+          <input name="ride_date" type="date" required />
+        </div>
+        <div class="form-group">
+          <label>Person <span style="color: red;">*</span></label>
+          <select name="person_count" required>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+        <button class="search-button" type="submit">Search</button>
+      </form>
+
+      <!-- Publish a Ride Form -->
+      <form class="form-container" id="publishRideForm" action="{{ url_for('driver_details') }}" method="POST" style="display: none;">
+        <div class="form-group">
+          <label>Source</label>
+          <input name="Source" placeholder="Source" type="text" required />
+        </div>
+        <div class="form-group">
+          <label>Destination</label>
+          <input name="destination" placeholder="Destination" type="text" required />
+        </div>
+        <div class="form-group">
+          <label>Select Date</label>
+          <input name="ride_date" type="date" required />
+        </div>
+        <div class="form-group">
+          <label>Available Seats</label>
+          <input name="available_seats" placeholder="Available Seats" type="number" required />
+        </div>
+        <div class="form-group">
+          <label>Ride Fare (₹)</label>
+          <input name="ride_fare" placeholder="Ride Fare" type="number" required />
+        </div>
+        <button class="search-button" type="submit">Publish Ride</button>
+      </form>
+    </div>
+    <form class="form-container" id="rideForm" action="{{ url_for('available_rides') }}" method="POST">
+      <label for="destination">Enter Destination:</label>
+      <input type="text" id="destination" name="destination" required>
+      <button type="submit">Search Rides</button>
+  </form>
+  
+
+    <!-- Footer -->
+    <div class="footer">
+      <a href="#" id="bookRideLink">
+        <i class="fas fa-car"></i>
+        Book a Ride
+      </a>
+      <a href="#" id="publishRideLink">
+        <i class="fas fa-plus-circle"></i>
+        Publish
+      </a>
+      <a href="#">
+        <i class="fas fa-list"></i>
+        Your Rides
+      </a>
+    </div>
+
+    <script>
+      document.getElementById("bookRideLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("rideForm").style.display = "block";
+        document.getElementById("publishRideForm").style.display = "none";
+      });
+
+      document.getElementById("publishRideLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("publishRideForm").style.display = "block";
+        document.getElementById("rideForm").style.display = "none";
+      });
+    </script>
+  </body>
+</html>

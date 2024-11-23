@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Available Rides</title>
+</head>
+<body>
+    <h1>Available Rides</h1>
+    {% if rides %}
+        <ul>
+            {% for ride in rides %}
+                <div class="ride">
+                    <p><strong>Name:</strong> {{ ride['name'] }}</p>
+                    <p><strong>Car Type:</strong> {{ ride['car_type'] }}</p>
+                    <p><strong>Destination:</strong> {{ ride['destination'] }}</p>
+                    <p><strong>Ride Fare:</strong> ₹{{ ride['fare'] }}</p>
+                    <p><strong>Seats Available:</strong> {{ ride['seats'] }}</p>
+                    <form action="{{ url_for('join_ride', ride_id=ride['ride_id']) }}" method="POST">
+                        <input type="hidden" name="ride_id" value="{{ride['ride_id']}}">
+                        <button type="submit">Join</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No rides available for the specified destination.</p>
+    {% endif %}
+    <script>
+        function searchRides() {
+            var source = document.getElementById('source').value;
+            var destination = document.getElementById('destination').value;
+    
+            // Send POST request to the server to search for rides
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ source: source, destination: destination })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.rides) {
+                    // Process the matching rides
+                    var ridesList = document.getElementById('rides-list');
+                    ridesList.innerHTML = ''; // Clear previous results
+    
+                    data.rides.forEach(ride => {
+                        var rideElement = document.createElement('div');
+                        rideElement.classList.add('ride-item');
+                        rideElement.innerHTML = `
+                            <p>Fare: ${ride.ride_fare}</p>
+                            <p>Ride ID: ${ride.ride_id}</p>
+                            <p>Document URL: ${ride.document_url || 'Not available'}</p>
+                            <button onclick="joinRide('${ride.ride_id}')">Join Ride</button>
+                        `;
+                        ridesList.appendChild(rideElement);
+                    });
+                } else {
+                    alert('No available rides found!');
+                }
+            });
+        }
+    </script>
+    
+</body>
+</html>
+

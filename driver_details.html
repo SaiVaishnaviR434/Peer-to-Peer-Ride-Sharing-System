@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Driver Details</h2>
+    <form action="{{ url_for('driver_details') }}" method="POST" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required>
+        
+        <label for="contact_number">Contact Number:</label>
+        <input type="text" id="contact_number" name="contact_number" required>
+        
+        <label for="car_details">Car Details:</label>
+        <input type="text" id="car_details" name="car_details" required>
+        
+        <label for="additional_notes">Additional Notes:</label>
+        <textarea id="additional_notes" name="additional_notes"></textarea>
+        
+        <h3>Upload Verification Documents</h3>
+        <label for="address_proof">Address Proof:</label>
+        <input type="file" id="address_proof" name="address_proof" required>
+        
+        <label for="driving_license">Driving License:</label>
+        <input type="file" id="driving_license" name="driving_license" required>
+        
+        <label for="vehicle_document">Vehicle Document:</label>
+        <input type="file" id="vehicle_document" name="vehicle_document" required>
+        
+        <label for="vehicle_insurance">Vehicle Insurance:</label>
+        <input type="file" id="vehicle_insurance" name="vehicle_insurance" required>
+        
+        <button type="submit">Publish Ride</button>
+    </form>
+</body>
+</html>
