@@ -1,5 +1,5 @@
 firebaseConfig = {
-  "apiKey": "AIzaSyCJxrzonTR_q1rvyClYbmMuhey3x7xtzys",
+  "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXXX",
   "authDomain": "peer2peer-ride-sharing-system.firebaseapp.com",
   "databaseURL": "https://peer2peer-ride-sharing-system-default-rtdb.firebaseio.com",
   "projectId": "peer2peer-ride-sharing-system",
